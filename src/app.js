@@ -44,15 +44,15 @@ app.use(passport.session());
 initializePassport();
 
 //Configuramos Multer: 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./src/public/img/productos");
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
-});
-app.use(multer({storage}).single("image"));
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, "./src/public/img/productos");
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.originalname);
+//     }
+// });
+// app.use(multer({storage}).single("image"));
 
 
 //Handlebars

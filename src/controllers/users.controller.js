@@ -58,9 +58,11 @@ class UserController {
                 password: createHash(password),
                 cart: cart._id,
                 login: "local",
-                chatid: ""
+                chatid: "",
+                documents:[{name: "Profile", reference:"src/uploads/profiles/sinImg.png"}]
             }
             const user = await userServices.createUser(newUser);
+            let imgProfile = user.documents.find((profile) => profile.name === "Profile");
 
             req.logger.info("(CONTROLLER) - Se crea usuario de manera exitosa");
 
@@ -73,6 +75,7 @@ class UserController {
                 premium: user.role === "PREMIUM" ? true : false,
                 cart: user.cart,
                 favorite: user.favorite,
+                imgProfile: imgProfile.reference,
                 chatid: user.chatid
             }, "coderhouse", {expiresIn: "20m"});
 
@@ -114,6 +117,10 @@ class UserController {
                 return done(null, false);
             }
 
+            let imgProfile = user.documents.find((profile) => profile.name === "Profile");
+
+            console.log(imgProfile.reference)
+
             req.logger.info("(CONTROLLER) - Usuario Logueado OK");
             const token = jwt.sign({
                 first_name: user.first_name,
@@ -124,8 +131,11 @@ class UserController {
                 premium: user.role === "PREMIUM" ? true : false,
                 cart: user.cart,
                 favorite: user.favorite,
+                imgProfile: imgProfile.reference,
                 chatid: user.chatid
             }, "coderhouse", {expiresIn: "20m"});
+
+            await userServices.updateUser(user._id, {last_connection: new Date()})
     
             res.cookie("coderCookieToken", token, {
                 maxAge: 180000,
@@ -141,6 +151,11 @@ class UserController {
 
     async logout (req, res) {
         try {
+
+            if (req.user) {
+                await userServices.updateUser(req.user._id, {last_connection: new Date()})
+            }
+
             res.clearCookie("coderCookieToken");
             res.clearCookie("prm")
             req.logger.info("(CONTROLLER) - Cierre de sesion exitoso");

@@ -1,4 +1,5 @@
 import multer from "multer";
+import mime from "mime";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -16,7 +17,19 @@ const storage = multer.diskStorage({
         cb(null, destinationFolder); 
     }, 
     filename: (req, file, cb) => {
-        cb(null, file.originalname); 
+        const { uid } = req.params;
+        let name;
+        switch(file.fieldname) {
+            case "profile": 
+                name = `${uid}.${mime.getExtension(file.mimetype)}`;
+                break; 
+            case "products": 
+                name = file.originalname;
+                break; 
+            case "document": 
+                name = file.originalname
+        }
+        cb(null, name); 
     }
 })
 

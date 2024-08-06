@@ -55,6 +55,21 @@ const schema = new mongoose.Schema({
 
     login: {
         type: String
+    },
+
+    register_date: {
+        type: Date, 
+        default: Date.now
+    },
+
+    documents: [{
+        name: String,
+        reference: String
+    }], 
+
+    last_connection: {
+        type: Date, 
+        default: Date.now
     }
     
 })
