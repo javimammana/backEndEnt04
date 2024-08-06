@@ -262,12 +262,34 @@ class UserController {
                 return res.status(404).send("Usuario no encontrado")
             }
 
-            const nvoRol = user.role === "USER" ? "PREMIUM" : "USER"
-            await userServices.updateUser(uid, {role: nvoRol});
-            const userUpdate = await userServices.getUserById(uid);
-            res.json(userUpdate);
+            if (user.role === "PREMIUM") {
+
+                await userServices.updateUser(uid, {role: "USER"});
+                const userUpdate = await userServices.getUserById(uid);
+                res.json(userUpdate);
+                return
+
+            }
+
+            let identificacion = user.documents.find((profile) => profile.name === "Identificacion");
+            let compDomicilio = user.documents.find((profile) => profile.name === "Domicilio");
+            let estCuenta = user.documents.find((profile) => profile.name === "Cuenta");
+
+            if (identificacion && compDomicilio && estCuenta ) {
+
+                await userServices.updateUser(uid, {role: "PREMIUM"});
+                const userUpdate = await userServices.getUserById(uid);
+                res.json(userUpdate);
+                return
+
+            }
+
+            return res.status(400).send("Usuario con ducmentacion incompleta");
+
+
 
         } catch (error) {
+            console.log(error)
             res.status(500).send("Error en el servidor al cambiar ROL");
         }
     }

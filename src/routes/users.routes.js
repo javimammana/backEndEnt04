@@ -31,14 +31,14 @@ router.post("/:uid/documents", upload.fields([{ name: "document" }, { name: "pro
             
             if (uploaddedDocuments.document) {
                 user.documents = user.documents.concat(uploaddedDocuments.document.map(doc => ({
-                    name: `${uid}${doc.originalname}`,
+                    name: doc.originalname,
                     reference: doc.path
                 })));
             }
 
             if (uploaddedDocuments.products) {
                 user.documents = user.documents.concat(uploaddedDocuments.products.map(doc => ({
-                    name: `${uid}${doc.originalname}`,
+                    name: doc.originalname,
                     reference: doc.path
                 })));
             }
