@@ -1,6 +1,6 @@
 import express from "express";
 import exphbs from "express-handlebars";
-import multer from "multer";
+// import multer from "multer";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import UserController from "../controllers/users.controller.js";
+import passport from "passport";
 
 
 
@@ -7,7 +8,7 @@ const router = Router();
 const userController = new UserController();
 
 router.post("/register", userController.createUser);
-router.post("/logout", userController.logout.bind(userController));
+router.post("/logout", passport.authenticate("jwt", {session: false, failureRedirect: "/login"}), userController.logout);
 router.post("/requestPasswordReset", userController.requestPasswordReset);
 router.post("/resetPassword", userController.resetPassword);
 router.put("/premium/:uid", userController.cambioRol);

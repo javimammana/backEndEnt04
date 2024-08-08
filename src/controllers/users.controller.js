@@ -284,7 +284,7 @@ class UserController {
 
             }
 
-            return res.status(400).send("Usuario con ducmentacion incompleta");
+            return res.status(400).send("Usuario con documentacion incompleta");
 
 
 
